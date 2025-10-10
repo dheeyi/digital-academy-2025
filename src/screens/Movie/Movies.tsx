@@ -1,49 +1,68 @@
-import React, { useEffect, useRef } from 'react';
-import { Dimensions, Text, View } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import React, { useEffect, useRef, useState } from 'react';
+import { Dimensions, View } from 'react-native';
 import Carousel, { ICarouselInstance } from 'react-native-reanimated-carousel';
 import { styles } from './style.ts';
 import { getPopularMovies } from '../../services/MDBService.ts';
 import { useSharedValue } from 'react-native-reanimated';
+import { MovieCard } from './components/MovieCard.tsx';
+import { DAText } from '../../components/atoms/DAText/DAText.tsx';
+import { DAButton } from '../../components/atoms/DAButton/DAButton.tsx';
 
-const data = [...new Array(6).keys()];
-const { width } = Dimensions.get('window');
+const { width, height } = Dimensions.get('window');
+
+interface Movie {
+  id: number;
+  title: string;
+  poster_path: string;
+  vote_average: number;
+  release_date: string;
+}
 
 const Movies = () => {
+  const [movies, setMovies] = useState<Movie[]>([]);
   const ref = useRef<ICarouselInstance>(null);
   const progress = useSharedValue<number>(0);
 
   useEffect(() =>{
     getPopularMovies()
       .then((response) => {
-        console.log('Popular Movies:', response);
+        setMovies(response);
       });
   }, []);
 
   return (
-    <SafeAreaView style={styles.container}>
-      <Text>Movies Component</Text>
-      <View>
-        <Carousel
-          ref={ref}
-          width={width}
-          height={width / 2}
-          data={data}
-          onProgressChange={progress}
-          renderItem={({ index }) => (
-            <View
-              style={{
-                flex: 1,
-                borderWidth: 1,
-                justifyContent: "center",
-              }}
-            >
-              <Text style={{ textAlign: "center", fontSize: 30 }}>{index}</Text>
-            </View>
-          )}
-        />
+    <View style={styles.container}>
+      <Carousel
+        ref={ref}
+        width={width}
+        height={height * 0.65}
+        data={movies}
+        onProgressChange={progress}
+        renderItem={({ item }) => (
+          <MovieCard posterPath={item.poster_path} />
+        )}
+      />
+
+      <View style={styles.overlay}>
+        <View style={styles.textRow}>
+          <DAText variant="subtitle">My list</DAText>
+          <DAText variant="subtitle">Discover</DAText>
+        </View>
+
+        <View style={styles.buttonRow}>
+          <DAButton
+            title="+ Wishlist"
+            variant="secondary"
+            onPress={() => console.log('Wishlist pressed')}
+          />
+          <DAButton
+            title="Details"
+            variant="primary"
+            onPress={() => console.log('Details pressed')}
+          />
+        </View>
       </View>
-    </SafeAreaView>
+    </View>
   );
 };
 
