@@ -7,6 +7,7 @@ import { useSharedValue } from 'react-native-reanimated';
 import { MovieCard } from './components/MovieCard.tsx';
 import { DAText } from '../../components/atoms/DAText/DAText.tsx';
 import { DAButton } from '../../components/atoms/DAButton/DAButton.tsx';
+import LinearGradient from 'react-native-linear-gradient';
 
 const { width, height } = Dimensions.get('window');
 
@@ -43,25 +44,30 @@ const Movies = () => {
         )}
       />
 
-      <View style={styles.overlay}>
-        <View style={styles.textRow}>
-          <DAText variant="subtitle">My list</DAText>
-          <DAText variant="subtitle">Discover</DAText>
-        </View>
+      <LinearGradient
+        colors={['rgba(0,0,0,0)', 'rgba(0,0,0,0.8)', 'rgba(0,0,0,1)']}
+        style={styles.gradient}
+      >
+        <View style={styles.overlay}>
+          <View style={styles.textRow}>
+            <DAText variant="subtitle">My list</DAText>
+            <DAText variant="subtitle">Discover</DAText>
+          </View>
 
-        <View style={styles.buttonRow}>
-          <DAButton
-            title="+ Wishlist"
-            variant="secondary"
-            onPress={() => console.log('Wishlist pressed')}
-          />
-          <DAButton
-            title="Details"
-            variant="primary"
-            onPress={() => console.log('Details pressed')}
-          />
+          <View style={styles.buttonRow}>
+            <DAButton
+              title="+ Wishlist"
+              variant="secondary"
+              onPress={() => console.log('Wishlist pressed')}
+            />
+            <DAButton
+              title="Details"
+              variant="primary"
+              onPress={() => console.log('Details pressed')}
+            />
+          </View>
         </View>
-      </View>
+      </LinearGradient>
     </View>
   );
 };
