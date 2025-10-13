@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Dimensions, View } from 'react-native';
-import Carousel, { ICarouselInstance } from 'react-native-reanimated-carousel';
+import Carousel, { ICarouselInstance, Pagination } from 'react-native-reanimated-carousel';
 import { styles } from './style.ts';
 import { getPopularMovies } from '../../services/MDBService.ts';
 import { useSharedValue } from 'react-native-reanimated';
@@ -24,10 +24,19 @@ const Movies = () => {
   const ref = useRef<ICarouselInstance>(null);
   const progress = useSharedValue<number>(0);
 
+  const onPressPagination = (index: number) => {
+    ref.current?.scrollTo({
+      count: index - progress.value,
+      animated: true,
+    });
+  };
+
   useEffect(() =>{
     getPopularMovies()
       .then((response) => {
         setMovies(response);
+        debugger;
+        console.log('response:', response);
       });
   }, []);
 
@@ -37,7 +46,9 @@ const Movies = () => {
         ref={ref}
         width={width}
         height={height * 0.65}
-        data={movies}
+        data={movies.slice(0, 7)}
+        autoPlay={true}
+        autoPlayInterval={3000}
         onProgressChange={progress}
         renderItem={({ item }) => (
           <MovieCard posterPath={item.poster_path} />
@@ -68,6 +79,15 @@ const Movies = () => {
           </View>
         </View>
       </LinearGradient>
+
+      <Pagination.Basic
+        progress={progress}
+        data={movies.slice(0, 7)}
+        containerStyle={styles.paginationContainer}
+        dotStyle={styles.paginationDot}
+        activeDotStyle={styles.paginationActiveDot}
+        onPress={onPressPagination}
+      />
     </View>
   );
 };

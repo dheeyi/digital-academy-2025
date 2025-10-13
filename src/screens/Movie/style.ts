@@ -35,5 +35,23 @@ export const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'center',
     gap: 12,
+    marginBottom: 24,
+  },
+  paginationContainer: {
+    gap: 10,
+    flexDirection: 'row',
+    paddingTop: 12,
+  },
+  paginationDot: {
+    backgroundColor: colors.white,
+    borderRadius: 50,
+    width: 10,
+    height: 10,
+  },
+  paginationActiveDot: {
+    backgroundColor: colors.primary,
+    borderRadius: 50,
+    width: 10,
+    height: 10,
   },
 });
