@@ -35,8 +35,6 @@ const Movies = () => {
     getPopularMovies()
       .then((response) => {
         setMovies(response);
-        debugger;
-        console.log('response:', response);
       });
   }, []);
 
