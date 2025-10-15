@@ -8,6 +8,17 @@ export const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: colors.background,
   },
+  scrollView: {
+    flex: 1,
+  },
+  carouselSection: {
+    position: 'relative',
+    height: height * 0.65,
+  },
+  contentSection: {
+    backgroundColor: colors.background,
+    paddingBottom: 40,
+  },
   loadingContainer: {
     flex: 1,
     justifyContent: 'center',
@@ -16,10 +27,10 @@ export const styles = StyleSheet.create({
   },
   gradient: {
     position: 'absolute',
-    bottom: height * 0.3,
+    top: height * 0.65 - 180,
     left: 0,
     right: 0,
-    height: 150,
+    height: 200,
     justifyContent: 'flex-end',
     paddingBottom: 20,
   },
@@ -40,7 +51,6 @@ export const styles = StyleSheet.create({
   paginationContainer: {
     gap: 10,
     flexDirection: 'row',
-    paddingTop: 12,
   },
   paginationDot: {
     backgroundColor: colors.white,
@@ -54,7 +64,7 @@ export const styles = StyleSheet.create({
     width: 10,
     height: 10,
   },
-  listMovies: {
-
-  },
+  headerContainer: {
+    marginTop: 30,
+  }
 });
