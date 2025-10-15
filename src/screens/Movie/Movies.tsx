@@ -8,6 +8,7 @@ import { MovieCard } from './components/MovieCard.tsx';
 import { DAText } from '../../components/atoms/DAText/DAText.tsx';
 import { DAButton } from '../../components/atoms/DAButton/DAButton.tsx';
 import LinearGradient from 'react-native-linear-gradient';
+import { DASubHeader } from '../../components/molecules/DASubHeader/DASubHeader.tsx';
 
 const { width, height } = Dimensions.get('window');
 
@@ -86,6 +87,13 @@ const Movies = () => {
         activeDotStyle={styles.paginationActiveDot}
         onPress={onPressPagination}
       />
+
+      <View style={styles.listMovies}>
+        <DASubHeader title="Popular Movies" onActionPress={() => {}} />
+      </View>
+      <View style={styles.listMovies}>
+        <DASubHeader title="Marvel Studios" onActionPress={() => {}} />
+      </View>
     </View>
   );
 };
