@@ -1,6 +1,5 @@
-import { useEffect, useRef, useState } from 'react';
-import { View, ScrollView, Dimensions } from 'react-native';
-import { getPopularMovies, getRatedMovies } from '../../services/MDBService';
+import { useRef } from 'react';
+import { View, ScrollView, Dimensions, ActivityIndicator } from 'react-native';
 import { styles } from './style';
 import Carousel, { ICarouselInstance, Pagination } from 'react-native-reanimated-carousel';
 import { useSharedValue } from 'react-native-reanimated';
@@ -8,26 +7,17 @@ import { MovieCard } from './components/MovieCard';
 import { DAText } from '../../components/atoms/DAText/DAText';
 import { DAButton } from '../../components/atoms/DAButton/DAButton';
 import LinearGradient from 'react-native-linear-gradient';
-import { TMDBMovie } from '../../types/movies.ts';
 import { DAListMovies } from '../../components/molecules/DAListMovies/DAListMovies';
 import { DASubHeader } from '../../components/molecules/DASubHeader/DASubHeader';
+import { useTMDB } from '../../hooks/useTMDB.ts';
 
 const { width, height } = Dimensions.get('window');
 
 const Movies = () => {
-  const [movies, setMovies] = useState<TMDBMovie[]>([]);
-  const [moviesRated, setRatedMovies] = useState<TMDBMovie[]>([]);
+  const { data: popularMovies, loading: loadingPopular } = useTMDB('/movie/popular');
+  const { data: ratedMovies, loading: loadingRated } = useTMDB('/movie/top_rated');
   const ref = useRef<ICarouselInstance>(null);
   const progress = useSharedValue<number>(0);
-
-  useEffect(() => {
-    getPopularMovies().then(response => {
-      setMovies(response);
-    });
-    getRatedMovies().then(rated => {
-      setRatedMovies(rated);
-    })
-  }, []);
 
   const onPressPagination = (index: number) => {
     ref.current?.scrollTo({
@@ -35,6 +25,15 @@ const Movies = () => {
       animated: true,
     });
   };
+
+  if (loadingPopular || loadingRated) {
+    return (
+      <View style={styles.loadingContainer}>
+        <ActivityIndicator>Loading...</ActivityIndicator>
+      </View>
+    );
+
+  }
 
   return (
     <View style={styles.container}>
@@ -49,7 +48,7 @@ const Movies = () => {
             autoPlay={true}
             autoPlayInterval={3000}
             height={height * 0.65}
-            data={movies.slice(0, 7)}
+            data={popularMovies.slice(0, 7)}
             onProgressChange={progress}
             renderItem={({ item }) => (
               <MovieCard posterPath={item.poster_path} />
@@ -81,7 +80,7 @@ const Movies = () => {
 
               <Pagination.Basic
                 progress={progress}
-                data={movies.slice(0, 7)}
+                data={popularMovies.slice(0, 7)}
                 containerStyle={styles.paginationContainer}
                 dotStyle={styles.paginationDot}
                 activeDotStyle={styles.paginationActiveDot}
@@ -94,11 +93,11 @@ const Movies = () => {
         <View style={styles.contentSection}>
           <View style={styles.headerContainer}>
             <DASubHeader title="Marvel Studios" onActionPress={() => {}} />
-            <DAListMovies movies={movies} />
+            <DAListMovies movies={popularMovies} />
           </View>
           <View style={styles.headerContainer}>
             <DASubHeader title="My Studios" onActionPress={() => {}} />
-            <DAListMovies movies={moviesRated} />
+            <DAListMovies movies={ratedMovies} />
           </View>
         </View>
       </ScrollView>
