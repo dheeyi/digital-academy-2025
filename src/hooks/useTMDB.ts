@@ -31,7 +31,7 @@ export const useTMDB = (endpoint: string, params = {}) => {
         if (error instanceof AxiosError) {
           setError(error.response?.data || error.message);
         } else {
-          setError('Unexpected error');
+          // setError('Unexpected error');
         }
         setData([]);
       } finally {
